@@ -1,66 +1,52 @@
 package edu.lemonschool.list;
 
-import lombok.NoArgsConstructor;
+import java.util.Arrays;
 
-import java.util.Objects;
+public class LinkedList<E> implements List<E> {
 
-@NoArgsConstructor
-public class LinkedListImplementation<T> implements LinkedList<T> {
+    private static class Node<E> {
+        private E element;
+        private Node<E> next;
+        private Node<E> previous;
 
-    private Node<T> root;
-    private int size = 0;
-
-    private static class Node<T> {
-        T element;
-        Node<T> next;
-        Node<T> previous;
-
-        Node(T element) {
+        Node(E element) {
             this.element = element;
             next = null;
             previous = null;
         }
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
+    private int size;
+    private Node<E> head;
+    private Node<E> tail;    
+
+    public LinkedList() {
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public int getSize() {
+        return size;
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 
     @Override
-    public String toString() {
-        return super.toString();
-    }
-
-    @Override
-    public void add(T element) {
-        Node<T> node;
-        if (Objects.isNull(root)) {
-            node = new Node<>(element);
-            root = node;
-        } else  {
-            /* TODO: Add your code here */
-//            do {
-//               node = root;
-//
-//            } while (Objects.nonNull(node.next));
+    public void add(E value) {
+        Node<E> newNode = new Node<>(value);
+        if (this.size == 0) {
+            this.head = this.tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.previous = tail;
+            tail = newNode;
         }
-
-        size++;
+        this.size++;
     }
 
     @Override
-    public void add(Integer index, T element) {
+    public void add(Integer index, E element) {
         /* TODO: Add your code here */
 
     }
@@ -72,22 +58,36 @@ public class LinkedListImplementation<T> implements LinkedList<T> {
     }
 
     @Override
-    public T update(Integer index) {
+    public E update(Integer index) {
         /* TODO: Add your code here */
 
         return null;
     }
 
     @Override
-    public T get(Integer index) {
-        /* TODO: Add your code here */
-        return null;
+    public E get(Integer index) {
+        Node<E> temp = head;
+        for (int i = 0; i < index; i++) {
+            temp = temp.next;
+        }
+        return temp.value;
     }
 
     @Override
-    public T[] getAll() {
-        /* TODO: Add your code here */
-
-        return null;
+    @SuppressWarnings("unchecked")
+    public E[] toArray() {
+        Object[] result = new Object[size];
+        Node<E> temp = head;
+        for (int i = 0; i < size; i++) {
+            result[i] = temp.value;
+            temp = temp.next;
+        }
+        return (E[])result;
     }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(toArray());
+    }
+
 }
