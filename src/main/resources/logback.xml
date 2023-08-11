@@ -1,0 +1,20 @@
+<configuration>
+
+    <property name="IO_LOG" value="logs/io.log"/>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${IO_LOG}</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="edu.lemonschool.list" level="debug" additivity="false">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <root level="debug">
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
