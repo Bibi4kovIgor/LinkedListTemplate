@@ -3,22 +3,43 @@ package edu.lemonschool.list;
 import java.util.Arrays;
 
 public class LinkedList<E> implements List<E> {
-
-    private static class Node<E> {
-        private E element;
+    //(Composition)
+    private final static class Node<E> {
+        private E value;
         private Node<E> next;
         private Node<E> previous;
 
-        Node(E element) {
-            this.element = element;
-            next = null;
-            previous = null;
+        public Node(E value, Node<E> next, Node<E> previous) {
+            this.value = value;
+            this.next = next;
+            this.previous = previous;
+        }
+
+        public Node() {
+            this.next = null;
+            this.previous = null;
+            this.value = null;
+
+        }
+
+        public Node(E value) {
+            this.value = value;
+            this.previous = null;
+            this.next = null;
         }
     }
 
     private int size;
     private Node<E> head;
-    private Node<E> tail;    
+    private Node<E> tail;
+
+
+
+    public LinkedList(int size, Node<E> head, Node<E> tail) {
+        this.size = size;
+        this.head = head;
+        this.tail = tail;
+    }
 
     public LinkedList() {
         this.head = null;
@@ -27,13 +48,26 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
-    public int getSize() {
-        return size;
+    public void add(E value) {
+        addElementToLastPosition(value);
     }
 
-
     @Override
-    public void add(E value) {
+    public void add(Integer position, E value) throws IllegalArgumentException {
+        if(position < 0 || position > size) {
+            throw new IllegalArgumentException("Position must be greater than 0 nad less than size + 1");
+        }
+        Node<E> newNode = new Node<>(value);
+        if(position == 0) {
+            addElementToFirstPosition(value);
+        } else if(position == size) {
+            addElementToLastPosition(value);
+        } else {
+            addElementToMiddlePosition(position, newNode);
+        }
+    }
+
+    private void addElementToLastPosition(E value) {
         Node<E> newNode = new Node<>(value);
         if (this.size == 0) {
             this.head = this.tail = newNode;
@@ -45,22 +79,57 @@ public class LinkedList<E> implements List<E> {
         this.size++;
     }
 
-    @Override
-    public void add(Integer index, E element) {
-        /* TODO: Add your code here */
+    private void addElementToMiddlePosition(int position, Node<E> newNode) {
+        Node<E> temp;
+        if (position > size / 2) {
+            temp = getNodeFromEnd(position);
+        } else {
+            temp = getNodeFromBegin(position);
+        }
+        Node<E> next = temp.next;
+        newNode.next = next;
+        newNode.previous = temp;
+        next.previous = newNode;
+        temp.next = newNode;
+        size++;
+    }
 
+    private Node<E> getNodeFromBegin(int position) {
+        Node<E> temp;
+        temp = head;
+        for (int i = 0; i <= position; i++) {
+            temp = temp.next;
+        }
+        return temp;
+    }
+
+    private Node<E> getNodeFromEnd(int position) {
+        Node<E> temp;
+        temp = tail;
+        for (int i = size - 1; i >= position; i--) {
+            temp = temp.previous; // previous
+        }
+        return temp;
+    }
+
+    private void addElementToFirstPosition(E value) {
+        Node<E> newNode = new Node<>(value);
+        if (size == 0) {
+            head = tail = newNode;
+        } else {
+            newNode.next = head;
+            head = newNode;
+        }
+        size++;
     }
 
     @Override
     public void remove(Integer index) {
-        /* TODO: Add your code here */
 
     }
 
     @Override
     public E update(Integer index) {
-        /* TODO: Add your code here */
-
         return null;
     }
 
@@ -86,8 +155,12 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
+    public int getSize() {
+        return size;
+    }
+
+    @Override
     public String toString() {
         return Arrays.toString(toArray());
     }
-
 }
