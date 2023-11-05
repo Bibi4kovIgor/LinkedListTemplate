@@ -74,8 +74,7 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public E[] toArray() {
+    public Object[] toArray() {
       
     }
 
