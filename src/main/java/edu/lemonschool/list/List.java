@@ -6,5 +6,5 @@ public interface List<E> {
     void remove(Integer index);
     E update(Integer index);
     E get(Integer index);
-    E[] toArray();
+    Object[] toArray();
 }
